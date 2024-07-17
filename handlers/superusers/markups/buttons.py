@@ -9,13 +9,6 @@ def main_menu_markup():
     return markup
 
 
-def admin_get_data_menu_markup():
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.row(KeyboardButton("Foydalanuvchilar👥"), KeyboardButton("Stadionlar🏟"))
-    markup.row(KeyboardButton("Buyurtmalar🗒"), KeyboardButton("🔙Orqaga"))
-    return markup
-
-
 def admin_menu_markup(user_id):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row(KeyboardButton("Owner qo'shish🕵️‍♂️"), KeyboardButton("Bot ma'lumotlari📖"))

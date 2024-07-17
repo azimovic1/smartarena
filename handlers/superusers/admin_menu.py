@@ -1,8 +1,8 @@
-import io
+import os
 import logging
 from telebot.types import Message
 
-from database.db_utils import serialize_stadiums, serialize_orders, serialize_users, add_owner_to_db, add_admin_to_db
+from database.db_utils import add_owner_to_db, add_admin_to_db
 from loader import bot, admin_sts, admin_menu_sts
 from database import Session
 from utils import log_level
@@ -24,40 +24,13 @@ async def admin_menu_(message: Message):
 async def admin_menu_datas(message: Message):
     chat_id = message.chat.id
     user_id = message.from_user.id
-    await bot.send_message(chat_id, "Ma'lumotlar", reply_markup=admin_get_data_menu_markup())
-    await bot.set_state(user_id, admin_menu_sts.data, chat_id)
-
-
-@bot.message_handler(state=admin_menu_sts.data, regexp="Foydalanuvchilar👥", user_type="is_admin")
-async def admin_menu_users(message: Message):
-    chat_id = message.chat.id
-    data = await serialize_users(Session)
-    file = io.BytesIO(data.encode())
-    file.name = "users.json"
-
-    await bot.send_chat_action(chat_id, "UPLOAD_DOCUMENT")
-    await bot.send_document(chat_id, file)
-
-
-@bot.message_handler(state=admin_menu_sts.data, regexp="Stadionlar🏟", user_type="is_admin")
-async def admin_menu_stadiums(message: Message):
-    chat_id = message.chat.id
-    data = await serialize_stadiums(Session)
-    file = io.BytesIO(data.encode())
-    file.name = "stadiums.json"
-    await bot.send_chat_action(chat_id, "UPLOAD_DOCUMENT")
-    await bot.send_document(chat_id, file)
-
-
-@bot.message_handler(state=admin_menu_sts.data, regexp="Buyurtmalar🗒", user_type="is_admin")
-async def admin_menu_orders(message: Message):
-    chat_id = message.chat.id
-    data = await serialize_orders(Session)
-
-    file = io.BytesIO(data.encode())
-    file.name = "orders.json"
-    await bot.send_chat_action(chat_id, "UPLOAD_DOCUMENT")
-    await bot.send_document(chat_id, file)
+    current_dir = os.path.dirname(__file__)
+    project_root = os.path.abspath(os.path.join(current_dir, '../../'))
+    db_path = os.path.join(project_root, 'database', 'db.sqlite3')
+    with open(db_path, 'rb') as file:
+        await bot.send_chat_action(chat_id, "UPLOAD_DOCUMENT")
+        await bot.send_document(chat_id, file, reply_markup=main_menu_markup())
+    await bot.set_state(user_id, admin_sts.main, chat_id)
 
 
 @bot.message_handler(regexp="Owner qo'shish🕵️‍♂️", user_type="is_admin", state=admin_menu_sts.main)
