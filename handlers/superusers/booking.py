@@ -234,6 +234,5 @@ async def admin_location_book(call: CallbackQuery):
     else:
         await bot.answer_callback_query(call.id, f"Lokatsiya")
         async with bot.retrieve_data(user_id, chat_id) as bdata:
-            location = bdata["location"]
-        await bot.set_state(user_id, admin_sts.loc_book, chat_id)
+            location = bdata.get("location")
         await bot.send_location(chat_id, **location, reply_markup=book_inline(True))
