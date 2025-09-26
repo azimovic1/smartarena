@@ -175,7 +175,6 @@ async def admin_hour_choose(call: CallbackQuery):
                     logger.info(f"admin_sts.hour book rebook {hour, len(stadiums)} continue handling preview")
                     call.data = f"adbook|{stadium_id}"
                     await admin_stadium_preview(call)
-                    return ContinueHandling()
                 else:
                     await bot.send_message(chat_id, "Stadionlar", reply_markup=markup)
                     await bot.send_message(chat_id, "Tanlang", reply_markup=stadiums_inline(stadiums))
@@ -224,7 +223,6 @@ async def admin_location_book(call: CallbackQuery):
 
             text = await add_order_to_db(data, Session)
             logger.info(data)
-            del data["region"], data["region_name"], data["district"], data["district_name"], data["stadium_id"], data["location"], data["stadium_name"]
 
         await bot.answer_callback_query(call.id, f"Bajarildi✅")
         await bot.send_message(chat_id, "Stadion bron qilindi", reply_markup=main_menu_markup())

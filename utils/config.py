@@ -4,7 +4,7 @@ import logging
 TOKEN = os.environ.get('TOKEN')
 DEBUG = int(os.environ.get("DEBUG", 1))
 if DEBUG:
-    TOKEN = "7100075678:AAHn_RUYuEcMLtIC7E4ZE_rbTvCAJzGNZEk"
+    TOKEN = "6262727985:AAGIqs4yQlS5GfjSqE4FQzJBriMC-4akk2w"
     log_level = logging.INFO
 
 else:

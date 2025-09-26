@@ -167,7 +167,6 @@ async def hour_choose(call: CallbackQuery):
                 if rebook:
                     call.data = f"book|{stadium_id}"
                     await stadium_preview(call)
-                    return ContinueHandling()
                 else:
                     await bot.send_message(chat_id, "Stadionlar", reply_markup=markup)
                     await bot.send_message(chat_id, "Tanlang", reply_markup=stadiums_inline(stadiums))
@@ -211,8 +210,6 @@ async def location_book(call: CallbackQuery):
                 data["last_booked_stadiums"] = [(data["stadium_name"], data["stadium_id"])]
 
             text = await add_order_to_db(data, Session)
-            del data["region"], data["region_name"], data["district"], data["district_name"], data["stadium_id"], data[
-                "location"], data["stadium_name"]
 
         await bot.answer_callback_query(call.id, f"Bajarildi✅")
         await bot.send_message(chat_id, "Stadion bron qilindi", reply_markup=main_menu_markup())
